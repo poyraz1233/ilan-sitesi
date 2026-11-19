@@ -3,7 +3,7 @@ import os
 import sqlite3
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -40,6 +40,21 @@ def init_db():
                 image TEXT NOT NULL
             )
         """)
+
+        admin_username = os.environ.get("ADMIN_USERNAME")
+        admin_password = os.environ.get("ADMIN_PASSWORD")
+
+        if admin_username and admin_password:
+            existing = conn.execute(
+                "SELECT id FROM users WHERE username = ?",
+                (admin_username,)
+            ).fetchone()
+
+            if existing is None:
+                conn.execute(
+                    "INSERT INTO users (username, password) VALUES (?, ?)",
+                    (admin_username, generate_password_hash(admin_password))
+                ))
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -140,8 +155,9 @@ def logout():
     session.clear()
     return redirect(url_for("index"))
 
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+init_db()
+
 if __name__ == "__main__":
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    init_db()
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
