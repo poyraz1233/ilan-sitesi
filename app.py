@@ -54,7 +54,7 @@ def init_db():
                 conn.execute(
                     "INSERT INTO users (username, password) VALUES (?, ?)",
                     (admin_username, generate_password_hash(admin_password))
-                ))
+                )
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
