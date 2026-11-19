@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlan Sitesi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <h1>İLAN SİTESİ</h1>
+            <p>Aradığınız ilan burada!</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Yayınlanan İlanlar</h2>
+
+        <div class="listings">
+            {% for listing in listings %}
+            <a class="listing-card" href="{{ url_for('detail', listing_id=listing['id']) }}">
+                <img src="{{ url_for('static', filename='uploads/' + listing['image']) }}" alt="{{ listing['title'] }}">
+                <div class="listing-info">
+                    <h3>{{ listing['title'] }}</h3>
+                    <p class="price">{{ listing['price'] }} TL</p>
+                    <p>{{ listing['description'][:100] }}...</p>
+                </div>
+            </a>
+            {% else %}
+            <p>Henüz yayınlanmış ilan bulunmuyor.</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <p>© İlan Sitesi</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ listing['title'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <h1>İLAN SİTESİ</h1>
+            <a href="{{ url_for('index') }}">← Tüm İlanlara Dön</a>
+        </div>
+    </header>
+
+    <main class="container detail">
+        <img class="detail-image"
+             src="{{ url_for('static', filename='uploads/' + listing['image']) }}"
+             alt="{{ listing['title'] }}">
+
+        <h2>{{ listing['title'] }}</h2>
+
+        <h3 class="price">{{ listing['price'] }} TL</h3>
+
+        <p>{{ listing['description'] }}</p>
+
+        <a class="call-button" href="tel:{{ listing['phone'] }}">
+            Telefonla Ara: {{ listing['phone'] }}
+        </a>
+    </main>
+
+</body>
+</html>
+
